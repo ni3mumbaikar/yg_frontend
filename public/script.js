@@ -22,22 +22,7 @@ const EDGES = [
   [14, 16],
 ];
 
-// async function draw_connections(poses) {}
-
 async function init() {
-  // const detectorConfig = {
-  //   modelType: poseDetection.movenet.modelType,
-  // };
-  // detector = await poseDetection.createDetector(
-  //   poseDetection.SupportedModels.PoseNet,
-  //   detectorConfig
-  // );
-
-  // const detector = await poseDetection.createDetector(
-  //   poseDetection.SupportedModels.MoveNet,
-  //   { modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER }
-  // );
-
   const detectorConfig = {
     modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
     enableSmoothing: true,
@@ -59,9 +44,15 @@ async function videoReady() {
 async function setup() {
   createCanvas(640, 480);
   video = createCapture(VIDEO, videoReady);
-  // video.size(320, 240);
   video.hide();
+  // tf.setBackend("wasm");
   await init();
+  // await tf.loadGraphModel("./yg-tfjsmodel/model.json");
+  // const model = await tf.loadLayersModel("yg-tfjsmodel/model.json");
+  const model = await tf.loadLayersModel(
+    "https://storage.googleapis.com/tfjs-models/tfjs/iris_v1/model.json"
+  );
+  model.summary();
 }
 
 async function getPoses() {
@@ -70,8 +61,6 @@ async function getPoses() {
   }
   setTimeout(getPoses, 0);
 }
-
-// async function draw_points(poses) {}
 
 async function draw_skeleton(poses) {
   for (let kp of poses[0].keypoints) {
@@ -108,7 +97,6 @@ async function draw_skeleton(poses) {
 
 function draw() {
   background(220);
-
   image(video, 0, 0);
   if (poses && poses.length > 0) {
     draw_skeleton(poses);
