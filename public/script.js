@@ -42,17 +42,11 @@ async function videoReady() {
 }
 
 async function setup() {
-  createCanvas(640, 480);
+  createCanvas(640, 640);
   video = createCapture(VIDEO, videoReady);
   video.hide();
   // tf.setBackend("wasm");
   await init();
-  // await tf.loadGraphModel("./yg-tfjsmodel/model.json");
-  // const model = await tf.loadLayersModel("yg-tfjsmodel/model.json");
-  const model = await tf.loadLayersModel(
-    "https://storage.googleapis.com/tfjs-models/tfjs/iris_v1/model.json"
-  );
-  model.summary();
 }
 
 async function getPoses() {
@@ -72,10 +66,8 @@ async function draw_skeleton(poses) {
       circle(x, y, 16);
     }
   }
-  fheight = 480;
-  fwidth = 640;
 
-  let kp = await poses[0].keypoints;
+  let kp = poses[0].keypoints;
 
   for (index in EDGES) {
     part1 = EDGES[index][0];
@@ -93,6 +85,22 @@ async function draw_skeleton(poses) {
       line(pt1.x, pt1.y, pt2.x, pt2.y);
     }
   }
+  await post_call(JSON.stringify(poses[0].keypoints));
+}
+
+async function post_call(postData) {
+  let url = "http://127.0.0.1:3000/points";
+
+  await httpDo(
+    url,
+    { headers: { "Content-Type": "application/json" } },
+    "POST",
+    "json",
+    postData,
+    function (response) {
+      console.log(response);
+    }
+  );
 }
 
 function draw() {
