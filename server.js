@@ -23,7 +23,7 @@ async function load() {
 
 load();
 
-var classes = ["downdog", "plank", "tree", "goddess", "warrior2", "no_pose"];
+var classes = ["downdog", "chair", "tree", "goddess", "warrior2", "no_pose"];
 
 app.use(express.static(`${__dirname}/public`));
 
