@@ -1,6 +1,7 @@
 let detector;
 let poses;
 let video;
+let p;
 const point_confidance_threshold = 0.5;
 
 const EDGES = [
@@ -45,6 +46,12 @@ async function setup() {
   createCanvas(640, 640);
   video = createCapture(VIDEO, videoReady);
   video.hide();
+  p = createP("Please wait loading model ...");
+  p.style("font-size", "24px");
+  p.style("color", "#ffffff");
+  p.style("-webkit-text-stroke-color", "#00ff00");
+  p.style(" -webkit-text-stroke-width", "2px");
+  p.position(10, 0);
   // tf.setBackend("wasm");
   await init();
 }
@@ -99,12 +106,13 @@ async function post_call(postData) {
     postData,
     function (response) {
       console.log(response);
+      p.html(response);
     }
   );
 }
 
 function draw() {
-  background(220);
+  background(255);
   image(video, 0, 0);
   if (poses && poses.length > 0) {
     draw_skeleton(poses);
