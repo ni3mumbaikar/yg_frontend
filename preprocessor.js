@@ -1,3 +1,5 @@
+var nj = require("numjs");
+
 function process(req, res, callback) {
   let kp = req.body;
   return processWithCenterOfBody(kp, 640, 640, res);
@@ -7,12 +9,14 @@ function processWithCenterOfBody(keypoints, width, height, res) {
   center_threshold = 0.5;
   // To scale up coordinates
   // normalize(keypoints, width, height);
-
+  // console.log(keypoints);
   // # To calculate center of the body
   centerBody = getBodyCentre(keypoints, center_threshold, res);
-
+  // console.log(centerBody);
   // # To get distance of each kp from center
   distance_list = get_distance_from_centre(keypoints, centerBody);
+  distance_list = normalize2d(distance_list).tolist();
+  console.log(distance_list);
   return [centerBody, distance_list];
 }
 
@@ -21,6 +25,15 @@ function normalize(keypoints, width, height) {
     kp["y"] = parseInt(keypoint[1] * height);
     kp["x"] = parseInt(keypoint[0] * width);
   }
+}
+
+function normalize2d(data) {
+  data = nj.array(data);
+  // console.log(data);
+  return nj.divide(
+    nj.subtract(data, nj.min(data)),
+    nj.array(nj.subtract(nj.max(data), nj.min(data))).tolist()[0]
+  );
 }
 
 function getBodyCentre(keypoints, center_threshold = 0.5, res) {
@@ -56,6 +69,7 @@ function get_distance_from_centre(keypoints, centerBody) {
     // distance = np.subtract(kpnp, centernp);
     distanceList.push(distance);
   }
+
   return distanceList;
 }
 

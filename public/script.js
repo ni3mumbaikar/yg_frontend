@@ -47,11 +47,11 @@ async function setup() {
   video = createCapture(VIDEO, videoReady);
   video.hide();
   p = createP("Please wait loading model ...");
-  p.style("font-size", "24px");
-  p.style("color", "#ffffff");
+  p.style("font-size", "30px");
+  p.style("color", "#FF0000");
   p.style("-webkit-text-stroke-color", "#00ff00");
   p.style(" -webkit-text-stroke-width", "2px");
-  p.position(10, 0);
+  p.position(190, 520);
   // tf.setBackend("wasm");
   await init();
 }

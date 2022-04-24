@@ -17,7 +17,9 @@
     "@tensorflow/tfjs-backend-webgl": "^3.15.0",
     "@tensorflow/tfjs-node-gpu": "^3.15.0",
     "express": "^4.17.3",
+    "install": "^0.13.0",
     "nodemon": "^2.0.15",
+    "numjs": "^0.16.1",
     "p5": "^1.4.1",
     "tfjs": "^0.6.0"
   }
